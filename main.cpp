@@ -1,50 +1,27 @@
-#include <SDL.h>
-#include <iostream>
+#include "game.hpp"
 
-int main(int argv, char **args)
-{
-	SDL_Init(SDL_INIT_EVERYTHING);
+int main(int argc, char *args[]){
 
-	SDL_Window *window = SDL_CreateWindow("Hello SDL", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 600, 0);
-  if(window == NULL){
-    std::cout << "[Error]: " << SDL_GetError() << std::endl ;
-    return 1;
-  }
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-  if(renderer == NULL){
-    std::cout << "[Error]: " << SDL_GetError() << std::endl ;
-    return 1;
-  }
-	bool isRunning = true;
-	SDL_Event event;
+    const int FPS = 60;
+    const int frameDelay = 1000 / 60; // 1s / 60fps = 16ms
+    uint32_t frameStart;              // time (in ms) on start of every frame
+    int frameTime;
 
-	while (isRunning)
-	{
-		while (SDL_PollEvent(&event))
-		{
-			switch (event.type)
-			{
-			case SDL_QUIT:
-				isRunning = false;
-				break;
+    Game *game = new Game(480, 600);
+    game->init("Sheep Game");
 
-			case SDL_KEYDOWN:
-				if (event.key.keysym.sym == SDLK_ESCAPE)
-				{
-					isRunning = false;
-				}
-			}
-		}
+    while (game->running()){
 
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        frameStart = SDL_GetTicks(); // eg. 1000
+        game->eventHandler();
+        game->update();
+        game->render();
 
-		SDL_RenderPresent(renderer);
-	}
-
-	SDL_DestroyRenderer(renderer);
-	SDL_DestroyWindow(window);
-	SDL_Quit();
-
-	return 0;
+        frameTime = SDL_GetTicks() - frameStart; // time taken by a frame. eg. 1010 - 1000 = 10
+        if (frameDelay > frameTime)              // eg. 16 > 10
+            SDL_Delay(frameDelay - frameTime);   // eg. Delay(6)
+        // else no delay
+    }
+    game->clean();
+    return 0;
 }

@@ -4,5 +4,8 @@
 #include "color.hpp"
 class Shape{
     public:
-        Shape(){}
+        SDL_Renderer *renderer;
+        Shape(SDL_Renderer *renderer): renderer(renderer){}
+        virtual void update(){};
+        virtual void render(){};
 };
