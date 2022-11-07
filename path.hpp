@@ -41,7 +41,7 @@ public:
   }
 
   void selectPath(){
-    rect.setColor(Color::WHITE());
+    rect.setColor(Color::LIGHT_BROWN());
   }
   void unselectPath(){
     rect.setColor(Color::BROWN());

@@ -9,11 +9,11 @@ class Environment{
     SDL_Renderer* renderer;
     int windowWidth,windowHeight;
     int tileSize;
-    int pathCount=4;
+    int pathCount=5;
     int gridCellSize=windowWidth/(pathCount*2+1);
-    // Layer* bgLayer;
+
     public:
-        Environment(SDL_Renderer *renderer,int windowHeight, int windowWidth,int tileSize=10)
+        Environment(SDL_Renderer *renderer,int windowHeight, int windowWidth,int tileSize=5)
             :renderer(renderer),windowHeight(windowHeight),windowWidth(windowWidth),tileSize(tileSize)
         {}
         Layer*  paintBg();
@@ -27,12 +27,10 @@ Layer*  Environment::paintBg(){
 
     RectFilled* rectBig=new RectFilled(renderer,0,0,windowWidth,windowHeight,Color::GREEN_GRASS_LIGHT());
     bgLayer->addShape(rectBig);
-    for(int row=1;row<=windowHeight/tileSize;row++){
-        for(int col=row%2+1;col<=windowWidth/tileSize;col+=2){
-            RectFilled* rect=new RectFilled(renderer,(col-1)*tileSize,(row-1)*tileSize,tileSize,tileSize,Color::GREEN_GRASS_DARK());
+        for(int col=1;col<=windowWidth/tileSize;col+=2){
+            RectFilled* rect=new RectFilled(renderer,(col-1)*tileSize,0,tileSize,windowHeight,Color::GREEN_GRASS_DARK());
             bgLayer->addShape(rect);
         }
-    }
     return bgLayer;
 }
 Layer*  Environment::plotGrid(){

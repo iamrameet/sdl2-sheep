@@ -19,25 +19,18 @@ class Controller{
 };
 
 void Controller::leftShiftPathSelector(){
-    if(selectedPath>0){
         paths[selectedPath]->unselectPath();
         selectedPath--;
+        if(selectedPath<0)
+            selectedPath=paths.size()-1;
         paths[selectedPath]->selectPath();
-    }
-
-        std::cout<<"Path selected: "<<selectedPath<<std::endl;
 }
 void Controller::rightShiftPathSelector(){
-    if(selectedPath<paths.size()-1){
         paths[selectedPath]->unselectPath();
-        selectedPath++;
+        selectedPath=(selectedPath+1)%paths.size();
         paths[selectedPath]->selectPath();
-
-    }
-        std::cout<<"Path selected: "<<selectedPath<<std::endl;
 }
 void Controller::plotSheep(){
-    std::cout<<"Plotting sheep at "<<selectedPath<<std::endl;
     paths[selectedPath]->sheeps.push_back(Sheep(renderer, paths[selectedPath]->x, paths[selectedPath]->y,paths[selectedPath]->getWidth(),paths[selectedPath]->getWidth()));
 }
 
