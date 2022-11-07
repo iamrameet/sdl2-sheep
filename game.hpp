@@ -115,6 +115,12 @@ void Game::eventHandler(){
         isRunning = false;
 }
 void Game::clean(){
+
+    delete rect;
+    delete defaultLayer;
+    for(SheepPath *path: paths)
+        delete path;
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
