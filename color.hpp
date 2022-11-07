@@ -2,40 +2,17 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
+
+#define COLOR_RED SDL_Color{255, 0, 0, 255}
+
+//or
+
 class Color{
     public:
-        enum ColorCode{
-            red,
-            green,
-            blue,
-            yellow,
-            black,
-            white,
-        };
-        static ColorCode colorCode;
-        static void newColor(SDL_Renderer* renderer,ColorCode code){
-            switch (code)
-            {
-            case red:
-                SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255);
-                break;
-            case green:
-                SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255);
-                break;
-            case blue:
-                SDL_SetRenderDrawColor(renderer,0,0,255,255);
-                break;
-            case yellow:
-                SDL_SetRenderDrawColor(renderer,255,255,0,255);
-                break;
-            case black:
-                SDL_SetRenderDrawColor(renderer,0,0,0,255);
-                break;
-            case white:
-                SDL_SetRenderDrawColor(renderer,255,255,255,255);
-                break;
-            default:
-                break;
-            }
-        }
+        static SDL_Color RED(){ return SDL_Color{255, 0, 0, 255}; }
+        static SDL_Color GREEN(){ return SDL_Color{0, 255, 0, 255}; }
+        static SDL_Color BLUE(){ return SDL_Color{0, 0, 255, 255}; }
+        static SDL_Color YELLOW(){ return SDL_Color{255, 255, 0, 255}; }
+        static SDL_Color BLACK(){ return SDL_Color{0, 0, 0, 255}; }
+        static SDL_Color WHITE(){ return SDL_Color{255, 255, 255, 255}; }
 };

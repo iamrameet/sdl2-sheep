@@ -4,43 +4,46 @@
 #include "../color.hpp"
 #include "../shape.hpp"
 class RectFilled:public Shape{
-    int x,y,width,height;
     SDL_Rect rect;
-    Color::ColorCode colorCode;
+    SDL_Color color;
     public:
-        RectFilled(SDL_Renderer* renderer,int x,int y,int width,int height,Color::ColorCode colorCode);
+        RectFilled(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color color);
 
-        int getX(){return x;}
-        int getY(){return y;}
-        int getWidth(){return width;}
-        int getHeight(){return height;}
-        Color::ColorCode getColorCode(){return colorCode;}
+        int getX(){return rect.x;}
+        int getY(){return rect.y;}
+        int getWidth(){return rect.w;}
+        int getHeight(){return rect.h;}
+        SDL_Color getColor(){return color;}
 
         void setX(int x){
-            rect.x=this->x = x;
+            rect.x = x;
         }
         void setY(int y){
-            rect.y=this->y = y;
+            rect.y = y;
         }
-        void setWidth(int x){
-            rect.w=this->width = x;
+        void setWidth(int width){
+            rect.w = width;
         }
-        void setHeight(int y){
-            rect.h=this->height = y;
+        void setHeight(int height){
+            rect.h = height;
         }
-        void setColor(Color::ColorCode color){
-            this->colorCode =color;
+        void setColor(SDL_Color color){
+            this->color = color;
         }
+        void update() override;
+        void render() override;
 };
 
-RectFilled::RectFilled(SDL_Renderer* renderer,int x,int y,int width,int height,Color::ColorCode colorCode):
-
-x(x),y(y),width(width),height(height),colorCode(colorCode)
-{
+RectFilled::RectFilled(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color color): Shape(renderer), color(color){
     rect.x=x;
     rect.y=y;
     rect.h=height;
     rect.w=width;
-    Color::newColor(renderer,colorCode);     
-    SDL_RenderFillRect( renderer, &rect );
+}
+
+void RectFilled::update(){}
+
+void RectFilled::render(){
+    SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
+    SDL_RenderDrawRect(renderer, &rect);
 }
