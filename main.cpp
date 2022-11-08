@@ -5,7 +5,6 @@ int main(int argc, char *args[]){
     const int FPS = 60;
     const int frameDelay = 1000 / 60; // 1s / 60fps = 16ms
     uint32_t frameStart;              // time (in ms) on start of every frame
-    int frameTime;
 
     Game *game = new Game(480, 600);
     game->init("Sheep Game");
@@ -17,9 +16,9 @@ int main(int argc, char *args[]){
         game->update();
         game->render();
 
-        frameTime = SDL_GetTicks() - frameStart; // time taken by a frame. eg. 1010 - 1000 = 10
-        if (frameDelay > frameTime)              // eg. 16 > 10
-            SDL_Delay(frameDelay - frameTime);   // eg. Delay(6)
+        game->frameTime = SDL_GetTicks() - frameStart; // time taken by a frame. eg. 1010 - 1000 = 10
+        if (frameDelay > game->frameTime)              // eg. 16 > 10
+            SDL_Delay(frameDelay - game->frameTime);   // eg. Delay(6)
         // else no delay
     }
     game->clean();
