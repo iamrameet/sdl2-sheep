@@ -7,11 +7,14 @@
 class Sheep{
 private:
   int x, y, dir;
-  RectFilled rect;
+  RectBordered rect;
 public:
   Sheep(SDL_Renderer *renderer, int x, int y, int direction = 1):
     x(x), y(y), dir(direction), rect(renderer, x, y, SIZE, SIZE, Color::GREEN()){
     // std::cout << "[Sheep]: created" << std::endl;
+  }
+  Sheep(SDL_Renderer *renderer, int x, int y,int width,int height, int direction = 1):
+    x(x), y(y), dir(direction), rect(renderer, x, y,width, height, Color::GREEN()){
   }
   ~Sheep(){
     // std::cout << "[Sheep]: destroyed" << std::endl;

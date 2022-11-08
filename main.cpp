@@ -7,7 +7,8 @@ int main(int argc, char *args[]){
     uint32_t frameStart;              // time (in ms) on start of every frame
     int frameTime;
 
-    Game *game = new Game(480, 600);
+    Game *game = new Game();
+
     game->init("Sheep Game");
 
     while (game->running()){
@@ -22,6 +23,7 @@ int main(int argc, char *args[]){
             SDL_Delay(frameDelay - frameTime);   // eg. Delay(6)
         // else no delay
     }
+    
     game->clean();
     return 0;
 }

@@ -8,14 +8,15 @@
 
 class SheepPath{
 private:
-  RectBordered rect;
+  RectFilled rect;
 public:
   int x, y;
   std::vector<Sheep> sheeps;
 
   SheepPath(SDL_Renderer *renderer, int x, int y):
-    x(x), y(y), rect(renderer, x, y, 80, 400, Color::WHITE()){}
-
+    x(x), y(y), rect(renderer, x, y, 80, 400, Color::BROWN()){}
+  SheepPath(SDL_Renderer *renderer, int x, int y,int width, int height):
+    x(x), y(y), rect(renderer, x, y,width,height, Color::BROWN()){}
   int getWidth(){
     return rect.getWidth();
   }
@@ -39,4 +40,10 @@ public:
       sheep.render();
   }
 
+  void selectPath(){
+    rect.setColor(Color::LIGHT_BROWN());
+  }
+  void unselectPath(){
+    rect.setColor(Color::BROWN());
+  }
 };
