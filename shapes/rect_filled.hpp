@@ -45,5 +45,5 @@ void RectFilled::update(){}
 
 void RectFilled::render(){
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
-    SDL_RenderDrawRect(renderer, &rect);
+    SDL_RenderFillRect(renderer, &rect);
 }

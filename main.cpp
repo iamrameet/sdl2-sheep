@@ -6,7 +6,8 @@ int main(int argc, char *args[]){
     const int frameDelay = 1000 / 60; // 1s / 60fps = 16ms
     uint32_t frameStart;              // time (in ms) on start of every frame
 
-    Game *game = new Game(480, 600);
+    Game *game = new Game();
+
     game->init("Sheep Game");
 
     while (game->running()){
@@ -21,6 +22,7 @@ int main(int argc, char *args[]){
             SDL_Delay(frameDelay - game->frameTime);   // eg. Delay(6)
         // else no delay
     }
+    
     game->clean();
     return 0;
 }
