@@ -30,6 +30,7 @@ class Game{
     int dir=1;
 
     public:
+        int frameTime = 0;
         Game();
         Game(int h,int w);
         ~Game();
@@ -82,17 +83,18 @@ void Game::init(const char* title,int x= SDL_WINDOWPOS_UNDEFINED,int y= SDL_WIND
     }
 }
 
-int counter = 0;
+long counter = 0;
 
 void Game::update(){
     // if(counter % 500 == 0)
-    //     paths[3]->sheeps.push_back(Sheep(renderer, paths[3]->x + 15, paths[3]->y));
+    //    paths[3]->addSheep();
     // else if(counter % 400 == 0)
-    //     paths[2]->sheeps.push_back(Sheep(renderer, paths[2]->x + 15, paths[2]->getHeight() - Sheep::SIZE, -1));
+    //    paths[2]->addSheep(-1);
     // else if(counter % 300 == 0)
-    //     paths[1]->sheeps.push_back(Sheep(renderer, paths[1]->x + 15, paths[1]->getHeight() - Sheep::SIZE, -1));
+    //    paths[1]->addSheep(-1);
     // else if(counter % 200 == 0)
-    //     paths[0]->sheeps.push_back(Sheep(renderer, paths[0]->x + 15, paths[0]->y));
+    //    paths[0]->addSheep();
+
     counter++;
 
     for(SheepPath *path: paths){

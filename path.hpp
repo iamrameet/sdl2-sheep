@@ -24,6 +24,12 @@ public:
     return rect.getHeight();
   }
 
+  void addSheep(int direction = 1){
+    int posX = x + 15;
+    int posY = direction == 1 ? rect.getHeight() - Sheep::SIZE : y;
+    sheeps.push_back(Sheep(rect.renderer, posX, posY, direction));
+  }
+
   void update(){
     for(std::vector<Sheep>::iterator sheep = sheeps.begin(); sheep != sheeps.end(); sheep++){
       int pos_y = sheep->getY();
