@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <SDL2/SDL.h>
+
 class Color{
     public:
         static SDL_Color RED(){ return SDL_Color{255, 0, 0, 255}; }
