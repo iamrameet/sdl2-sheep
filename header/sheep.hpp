@@ -14,6 +14,9 @@ public:
   void move(int movementFactor);
   void update();
   void render();
+  void leftShiftPathSelector();
+  void rightShiftPathSelector();
+  void plotSheep();
 public:
   static const int SIZE = 30;
 };

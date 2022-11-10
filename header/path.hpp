@@ -11,9 +11,9 @@ class SheepPath{
 private:
   RectFilled rect;
   SDL_Point *cursor;
-  RectCollider *collider;
 public:
   int x, y;
+  RectCollider *collider;
   std::vector<Sheep> sheeps;
   SheepPath(SDL_Renderer *renderer, int x, int y);
   SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor);

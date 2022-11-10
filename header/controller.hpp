@@ -13,7 +13,10 @@ class Controller{
     int selectedPath = 0;
     public:
         Controller(SDL_Renderer *renderer, std::vector<SheepPath *> &paths);
+        int getSelectedPath();
+        void clearSelection();
+        void selectPath(int index);
         void leftShiftPathSelector();
         void rightShiftPathSelector();
-        void plotSheep();
+        void plotSheep(int direction);
 };

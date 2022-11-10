@@ -1,3 +1,4 @@
+#include <iostream>
 #include "game.hpp"
 
 Game::Game(){}
@@ -48,10 +49,16 @@ void Game::update(){
   //    paths[0]->addSheep();
 
   counter++;
-
-  for(SheepPath *path: paths){
-    path->update();
+  int p = 0;
+  for(; p < paths.size(); p++){
+    if(controller->getSelectedPath() != p && paths[p]->collider->withPoint(&cursor)){
+      controller->selectPath(p);
+      break;
+    }
+    paths[p]->update();
   }
+  if(p == paths.size())
+    controller->clearSelection();
 }
 
 void Game::render(){
@@ -86,9 +93,13 @@ void Game::eventHandler(){
           controller->rightShiftPathSelector();
           break;
         case SDLK_SPACE:
-          controller->plotSheep();
+          controller->plotSheep(1);
           break;
       }
+      break;
+    case SDL_MOUSEBUTTONUP:
+      std::cout << "button pressed" << std::endl;
+      controller->plotSheep(-1);
       break;
   }
   SDL_PumpEvents();
