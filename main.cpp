@@ -8,10 +8,13 @@ int main(int argc, char *args[]){
 
     Game *game = new Game();
 
-    game->init("Sheep Game");
+    bool inialised = game->init("Sheep Game");
+    if(inialised == false)
+        std::cout << "Error: " << SDL_GetError() << std::endl;
 
     while (game->running()){
 
+        // std::cout << "FPS: " << (int) (game->frameTime) << std::endl;
         frameStart = SDL_GetTicks(); // eg. 1000
         game->eventHandler();
         game->update();
@@ -22,7 +25,6 @@ int main(int argc, char *args[]){
             SDL_Delay(frameDelay - game->frameTime);   // eg. Delay(6)
         // else no delay
     }
-    
     game->clean();
     return 0;
 }
