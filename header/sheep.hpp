@@ -8,7 +8,6 @@ private:
   int x, y, dir;
   RectFilled rect;
 public:
-  Sheep(SDL_Renderer *renderer, int x, int y, int direction = 1);
   Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction = 1);
   ~Sheep();
   int getY();

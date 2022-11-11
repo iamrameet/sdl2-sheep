@@ -1,11 +1,8 @@
 #include "sheep.hpp"
 
-Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int direction):
-  x(x), y(y), dir(direction), rect(renderer, x, y, SIZE, SIZE, Color::GREEN()){
+Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction):
+  x(x), y(y), dir(direction), rect(renderer, x, y,width, height, direction == 1 ? Color::GREEN() : Color::RED()){
   // std::cout << "[Sheep]: created" << std::endl;
-}
-Sheep::Sheep(SDL_Renderer *renderer, int x, int y,int width,int height, int direction):
-  x(x), y(y), dir(direction), rect(renderer, x, y,width, height, Color::GREEN()){
 }
 Sheep::~Sheep(){
   // std::cout << "[Sheep]: destroyed" << std::endl;

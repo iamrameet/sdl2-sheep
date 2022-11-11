@@ -1,13 +1,19 @@
 #include "path.hpp"
 
-SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y):
-  x(x), y(y), rect(renderer, x, y, 80, 400, Color::BROWN()){
-    collider = new RectCollider(x, y, 80, 400);
-  }
-SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y,int width, int height, SDL_Point *cursor):
-  x(x), y(y), rect(renderer, x, y,width,height, Color::BROWN()), cursor(cursor){
-    collider = new RectCollider(x, y, width, height);
-  }
+SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor):
+  x(x), y(y),
+  rect(renderer, x, y, width,height, Color::BROWN()),
+  highlight{
+    RectFilled(rect),
+    RectFilled(rect)
+  },
+  cursor(cursor)
+{
+  collider = new RectCollider(x, y, width, height);
+  highlight[0].setHeight(40);
+  highlight[1].setHeight(40);
+  highlight[1].setY(rect.getHeight() - 40);
+}
 int SheepPath::getWidth(){
   return rect.getWidth();
 }
@@ -18,7 +24,7 @@ int SheepPath::getHeight(){
 void SheepPath::addSheep(int direction){
   int posX = x + 10;
   int posY = direction == -1 ? rect.getHeight() - Sheep::SIZE : y;
-  sheeps.push_back(Sheep(rect.renderer, posX, posY, direction));
+  sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction));
 }
 
 void SheepPath::update(){
@@ -38,6 +44,8 @@ void SheepPath::update(){
 
 void SheepPath::render(){
   rect.render();
+  highlight[0].render();
+  highlight[1].render();
   for(Sheep sheep: sheeps)
     sheep.render();
 }
@@ -47,4 +55,11 @@ void SheepPath::selectPath(){
 }
 void SheepPath::unselectPath(){
   rect.setColor(Color::BROWN());
+}
+
+void SheepPath::setHighlight(unsigned int index, bool show){
+  if(show)
+    highlight[index % 2].setColor(index == 0 ? Color::GREEN_GRASS_DARK() : Color::GREEN_GRASS_LIGHT());
+  else
+    highlight[index % 2].setColor(Color::BROWN());
 }

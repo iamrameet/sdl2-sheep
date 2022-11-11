@@ -2,43 +2,56 @@
 #include<SDL2/SDL.h>
 #include "controller.hpp"
 
-Controller::Controller(SDL_Renderer *renderer, std::vector<SheepPath> &paths):
-  renderer(renderer), paths(&paths){}
+Controller::Controller(SDL_Renderer *renderer, VectorList<SheepPath> &paths):
+  renderer(renderer), paths(paths){}
 
-int Controller::getSelectedPath(){
-  return selectedPath;
+int Controller::getSelectedIndex(){
+  return selected;
 }
 
-void Controller::clearSelection(){
-  if(selectedPath < 0 || selectedPath >= paths->size())
-    return;
-  (*paths)[selectedPath].unselectPath();
+SheepPath * Controller::getSelectedPath(){
+  return paths[selected];
 }
 
 void Controller::selectPath(int index){
-  clearSelection();
-  selectedPath = index % paths->size();
-  (*paths)[selectedPath].selectPath();
-  std::cout << "[Controller]: Path [" << selectedPath << "] selected" << std::endl;
+  onUnselect(paths[selected], selected, 1);
+  // if(index < 0)
+  //   index = paths.length() - index - 1;
+  if(index >= 0 && index < paths.length()){
+    selected = index % paths.length();
+    onSelect(paths[selected], selected, 1);
+  }
 }
 
-void Controller::leftShiftPathSelector(){
-  clearSelection();
-  selectedPath--;
-  if (selectedPath < 0)
-    selectedPath = paths->size() - 1;
-  (*paths)[selectedPath].selectPath();
-  std::cout << "[Controller]: Path [" << selectedPath << "] selected" << std::endl;
+void Controller::selectPathRight(){
+  onUnselect(paths[selected], selected, 0);
+  selected++;
+  if(selected >= paths.length())
+    selected = 0;
+  onSelect(paths[selected], selected, 0);
 }
-
-void Controller::rightShiftPathSelector(){
-  clearSelection();
-  selectedPath = (selectedPath + 1) % paths->size();
-  (*paths)[selectedPath].selectPath();
-  std::cout << "[Controller]: Path [" << selectedPath << "] selected" << std::endl;
+void Controller::selectPathLeft(){
+  onUnselect(paths[selected], selected, 0);
+  selected--;
+  if(selected < 0)
+    selected = paths.length() - 1;
+  onSelect(paths[selected], selected, 0);
+}
+void Controller::clearSelection(){
+  onUnselect(paths[selected], selected, 0);
+  selected = -1;
 }
 void Controller::plotSheep(int direction = 1){
-  if(selectedPath >= 0 && selectedPath < paths->size())
-    (*paths)[selectedPath].addSheep(direction);
+  if(selected >= 0 && selected < paths.length())
+    paths[selected]->addSheep(direction);
   // sheeps.push_back(Sheep(renderer, paths[selectedPath]->x, paths[selectedPath]->y,paths[selectedPath]->getWidth(),paths[selectedPath]->getWidth()));
+}
+
+void Controller::onSelect(SheepPath *path, int index, unsigned int highlightIndex){
+  if(paths[selected] != nullptr)
+    paths[selected]->setHighlight(highlightIndex, true);
+}
+void Controller::onUnselect(SheepPath *path, int index, unsigned int highlightIndex){
+  if(paths[selected] != nullptr)
+    paths[selected]->setHighlight(highlightIndex, false);
 }

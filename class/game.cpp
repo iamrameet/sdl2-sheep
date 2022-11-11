@@ -24,13 +24,8 @@ bool Game::init(const char *title, int x, int y){
   bgLayer = environment->paintBg();
   gridLayer = environment->plotGrid();
   environment->paintPaths(&paths, &cursor);
-  // controller = new Controller(renderer, paths);
-  paths.onSelect = [](SheepPath *path){
-    path->selectPath();
-  };
-  paths.onUnselect = [](SheepPath *path){
-    path->unselectPath();
-  };
+  player[0] = new Player(Controller(renderer, paths));
+  player[1] = new Player(Controller(renderer, paths));
 
   // paths[0] = new SheepPath(renderer, 100, 0);
   // paths[1] = new SheepPath(renderer, 200, 0);
@@ -56,16 +51,15 @@ void Game::update(){
 
   counter++;
   int p = 0;
-  return;
   for(; p < paths.length(); p++){
-    if(controller->getSelectedPath() != p && paths.getItem(p)->collider->withPoint(&cursor)){
-      controller->selectPath(p);
+    paths[p]->update();
+    if(player[1]->controller.getSelectedIndex() != p && paths[p]->collider->withPoint(&cursor)){
+      player[1]->controller.selectPath(p);
       break;
     }
-    paths.getItem(p)->update();
   }
-  if(p == paths.length())
-    controller->clearSelection();
+  // if(p == paths.length())
+  //   paths.clearSelection();
 }
 
 void Game::render(){
@@ -94,20 +88,18 @@ void Game::eventHandler(){
           isRunning = false;
           break;
         case SDLK_LEFT:
-          paths.selectPrevItem();
+          player[0]->controller.selectPathLeft();
           break;
         case SDLK_RIGHT:
-          paths.selectPrevItem();
+          player[0]->controller.selectPathRight();
           break;
         case SDLK_SPACE:
-          paths.getSelectedItem()->addSheep(1);
-          // controller->plotSheep(1);
+          player[0]->controller.plotSheep(1);
           break;
       }
       break;
     case SDL_MOUSEBUTTONUP:
-      std::cout << "button pressed" << std::endl;
-      controller->plotSheep(-1);
+      player[1]->controller.plotSheep(-1);
       break;
   }
   SDL_PumpEvents();
@@ -117,7 +109,6 @@ void Game::eventHandler(){
 void Game::clean(){
   // delete defaultLayer;
   delete gridLayer;
-  delete controller;
   delete environment;
   // for(SheepPath path: paths)
   //   delete &path;

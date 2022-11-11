@@ -11,6 +11,7 @@
 #include "shapes/rect_filled.hpp"
 #include "shapes/rect_bordered.hpp"
 #include "controller.hpp"
+#include "player.hpp"
 #include "vector-list.hpp"
 
 class Game{
@@ -19,6 +20,7 @@ class Game{
     int windowWidth=500;
     bool isRunning = false;
     VectorList<SheepPath> paths;
+    Player *player[2];
 
     SDL_Window *window;
     SDL_Renderer *renderer;
