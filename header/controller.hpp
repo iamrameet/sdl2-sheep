@@ -8,11 +8,11 @@
 
 class Controller{
     // Array(SheepPath *, paths);
-    std::vector<SheepPath *> paths;
+    std::vector<SheepPath> *paths;
     SDL_Renderer *renderer;
     int selectedPath = 0;
     public:
-        Controller(SDL_Renderer *renderer, std::vector<SheepPath *> &paths);
+        Controller(SDL_Renderer *renderer, std::vector<SheepPath> &paths);
         int getSelectedPath();
         void clearSelection();
         void selectPath(int index);

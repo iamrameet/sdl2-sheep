@@ -23,3 +23,6 @@ void Sheep::update(){
 void Sheep::render(){
   rect.render();
 }
+void Sheep::setColor(SDL_Color color){
+  this->rect.setColor(color);
+}

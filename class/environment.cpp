@@ -36,16 +36,14 @@ Layer * Environment::plotGrid(){
     return gridLayer;
 }
 
-std::vector<SheepPath *> Environment::paintPaths(SDL_Point *cursor){
-    std::vector<SheepPath *> paths;
+void Environment::paintPaths(VectorList<SheepPath> *paths, SDL_Point *cursor){
     int posX = gridCellSize,
         posY = 0,
         pathWidth = gridCellSize,
         pathHeight = windowHeight;
 
     for(int i = 0; i < pathCount; i++){
-        paths.push_back(new SheepPath(renderer, posX, posY, pathWidth, pathHeight, cursor));
+        paths->addItem(SheepPath(renderer, posX, posY, pathWidth, pathHeight, cursor));
         posX += pathWidth + gridCellSize;
     }
-    return paths;
 }

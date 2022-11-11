@@ -11,20 +11,26 @@ bool Game::init(const char *title, int x, int y){
 
   std::cout << "[Game]: SDL initialised" << std::endl;
   window = SDL_CreateWindow(title, x, y, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
-  if(window == NULL)
+  if(window == nullptr)
     return false;
 
   std::cout << "[Game]: Window created!" << std::endl;
   renderer = SDL_CreateRenderer(window, -1, 0);
-  if(renderer == NULL)
+  if(renderer == nullptr)
     return false;
 
   // defaultLayer = new Layer();
   environment = new Environment(renderer, windowHeight, windowWidth);
   bgLayer = environment->paintBg();
   gridLayer = environment->plotGrid();
-  paths = environment->paintPaths(&cursor);
-  controller = new Controller(renderer, paths);
+  environment->paintPaths(&paths, &cursor);
+  // controller = new Controller(renderer, paths);
+  paths.onSelect = [](SheepPath *path){
+    path->selectPath();
+  };
+  paths.onUnselect = [](SheepPath *path){
+    path->unselectPath();
+  };
 
   // paths[0] = new SheepPath(renderer, 100, 0);
   // paths[1] = new SheepPath(renderer, 200, 0);
@@ -50,14 +56,15 @@ void Game::update(){
 
   counter++;
   int p = 0;
-  for(; p < paths.size(); p++){
-    if(controller->getSelectedPath() != p && paths[p]->collider->withPoint(&cursor)){
+  return;
+  for(; p < paths.length(); p++){
+    if(controller->getSelectedPath() != p && paths.getItem(p)->collider->withPoint(&cursor)){
       controller->selectPath(p);
       break;
     }
-    paths[p]->update();
+    paths.getItem(p)->update();
   }
-  if(p == paths.size())
+  if(p == paths.length())
     controller->clearSelection();
 }
 
@@ -65,8 +72,8 @@ void Game::render(){
   SDL_RenderClear(renderer);
   // defaultLayer->render();
   bgLayer->render();
-  for(SheepPath *path: paths){
-    path->render();
+  for(SheepPath path: paths){
+    path.render();
   }
   // gridLayer->render();
   SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
@@ -87,13 +94,14 @@ void Game::eventHandler(){
           isRunning = false;
           break;
         case SDLK_LEFT:
-          controller->leftShiftPathSelector();
+          paths.selectPrevItem();
           break;
         case SDLK_RIGHT:
-          controller->rightShiftPathSelector();
+          paths.selectPrevItem();
           break;
         case SDLK_SPACE:
-          controller->plotSheep(1);
+          paths.getSelectedItem()->addSheep(1);
+          // controller->plotSheep(1);
           break;
       }
       break;
@@ -111,8 +119,8 @@ void Game::clean(){
   delete gridLayer;
   delete controller;
   delete environment;
-  for(SheepPath *path: paths)
-    delete path;
+  // for(SheepPath path: paths)
+  //   delete &path;
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);

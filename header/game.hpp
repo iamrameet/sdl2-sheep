@@ -11,13 +11,14 @@
 #include "shapes/rect_filled.hpp"
 #include "shapes/rect_bordered.hpp"
 #include "controller.hpp"
+#include "vector-list.hpp"
 
 class Game{
 
     int windowHeight=650;
     int windowWidth=500;
     bool isRunning = false;
-    std::vector<SheepPath* >paths;
+    VectorList<SheepPath> paths;
 
     SDL_Window *window;
     SDL_Renderer *renderer;

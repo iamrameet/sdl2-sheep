@@ -3,6 +3,7 @@
 #include "SDL2/SDL.h"
 #include "layer.hpp"
 #include "path.hpp"
+#include "vector-list.hpp"
 
 class Environment{
 
@@ -16,6 +17,6 @@ class Environment{
         Environment(SDL_Renderer *renderer, int windowHeight, int windowWidth,int tileSize = 5);
         Layer * paintBg();
         Layer * plotGrid();
-        std::vector<SheepPath *> paintPaths(SDL_Point *cursor);
+        void paintPaths(VectorList<SheepPath> *paths, SDL_Point *cursor);
 
 };
