@@ -9,13 +9,12 @@
 
 class SheepPath{
 private:
-  RectFilled rect;
+  RectFilled rect, highlight[2];
   SDL_Point *cursor;
 public:
   int x, y;
   RectCollider *collider;
   std::vector<Sheep> sheeps;
-  SheepPath(SDL_Renderer *renderer, int x, int y);
   SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor);
   int getWidth();
   int getHeight();
@@ -24,4 +23,5 @@ public:
   void render();
   void selectPath();
   void unselectPath();
+  void setHighlight(unsigned int index, bool show);
 };

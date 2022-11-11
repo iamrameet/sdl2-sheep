@@ -11,20 +11,21 @@ bool Game::init(const char *title, int x, int y){
 
   std::cout << "[Game]: SDL initialised" << std::endl;
   window = SDL_CreateWindow(title, x, y, windowWidth, windowHeight, SDL_WINDOW_SHOWN);
-  if(window == NULL)
+  if(window == nullptr)
     return false;
 
   std::cout << "[Game]: Window created!" << std::endl;
   renderer = SDL_CreateRenderer(window, -1, 0);
-  if(renderer == NULL)
+  if(renderer == nullptr)
     return false;
 
   // defaultLayer = new Layer();
   environment = new Environment(renderer, windowHeight, windowWidth);
   bgLayer = environment->paintBg();
   gridLayer = environment->plotGrid();
-  paths = environment->paintPaths(&cursor);
-  controller = new Controller(renderer, paths);
+  environment->paintPaths(&paths, &cursor);
+  player[0] = new Player(Controller(renderer, paths));
+  player[1] = new Player(Controller(renderer, paths));
 
   // paths[0] = new SheepPath(renderer, 100, 0);
   // paths[1] = new SheepPath(renderer, 200, 0);
@@ -50,23 +51,23 @@ void Game::update(){
 
   counter++;
   int p = 0;
-  for(; p < paths.size(); p++){
-    if(controller->getSelectedPath() != p && paths[p]->collider->withPoint(&cursor)){
-      controller->selectPath(p);
+  for(; p < paths.length(); p++){
+    paths[p]->update();
+    if(player[1]->controller.getSelectedIndex() != p && paths[p]->collider->withPoint(&cursor)){
+      player[1]->controller.selectPath(p);
       break;
     }
-    paths[p]->update();
   }
-  if(p == paths.size())
-    controller->clearSelection();
+  // if(p == paths.length())
+  //   paths.clearSelection();
 }
 
 void Game::render(){
   SDL_RenderClear(renderer);
   // defaultLayer->render();
   bgLayer->render();
-  for(SheepPath *path: paths){
-    path->render();
+  for(SheepPath path: paths){
+    path.render();
   }
   // gridLayer->render();
   SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);
@@ -87,19 +88,18 @@ void Game::eventHandler(){
           isRunning = false;
           break;
         case SDLK_LEFT:
-          controller->leftShiftPathSelector();
+          player[0]->controller.selectPathLeft();
           break;
         case SDLK_RIGHT:
-          controller->rightShiftPathSelector();
+          player[0]->controller.selectPathRight();
           break;
         case SDLK_SPACE:
-          controller->plotSheep(1);
+          player[0]->controller.plotSheep(1);
           break;
       }
       break;
     case SDL_MOUSEBUTTONUP:
-      std::cout << "button pressed" << std::endl;
-      controller->plotSheep(-1);
+      player[1]->controller.plotSheep(-1);
       break;
   }
   SDL_PumpEvents();
@@ -109,10 +109,9 @@ void Game::eventHandler(){
 void Game::clean(){
   // delete defaultLayer;
   delete gridLayer;
-  delete controller;
   delete environment;
-  for(SheepPath *path: paths)
-    delete path;
+  // for(SheepPath path: paths)
+  //   delete &path;
 
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
