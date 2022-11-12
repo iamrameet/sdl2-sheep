@@ -14,6 +14,7 @@ class RectFilled:public Shape{
         int getY();
         int getWidth();
         int getHeight();
+        SDL_Rect getRect();
         SDL_Color getColor();
 
         void setX(int x);

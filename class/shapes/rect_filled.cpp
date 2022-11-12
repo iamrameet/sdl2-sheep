@@ -11,6 +11,7 @@ int RectFilled::getX(){return rect.x;}
 int RectFilled::getY(){return rect.y;}
 int RectFilled::getWidth(){return rect.w;}
 int RectFilled::getHeight(){return rect.h;}
+SDL_Rect RectFilled::getRect(){return rect;}
 SDL_Color RectFilled::getColor(){return color;}
 
 void RectFilled::setX(int x){

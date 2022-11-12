@@ -12,6 +12,7 @@ private:
   RectFilled rect, highlight[2];
   SDL_Point *cursor;
 public:
+  int collidedWeight=0;
   int x, y;
   RectCollider *collider;
   std::vector<Sheep> sheeps;
