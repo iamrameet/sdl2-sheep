@@ -28,17 +28,46 @@ void SheepPath::addSheep(int direction){
 }
 
 void SheepPath::update(){
-  if(collider->withPoint(cursor))
-    selectPath();
-  else
-    unselectPath();
-
   for(std::vector<Sheep>::iterator sheep = sheeps.begin(); sheep != sheeps.end(); sheep++){
+
     int pos_y = sheep->getY();
-    if(pos_y < 0 || pos_y > rect.getHeight())
+    
+    if(pos_y < 0 || pos_y > rect.getHeight()){
+      if(sheep->collided)
+        collidedWeight-=sheep->getWeight()*sheep->getDirection();
       sheeps.erase(sheep--);
-    else
-      sheep->update();
+    }
+    else{
+      
+      if(!sheep->collided){
+        for(std::vector<Sheep>::iterator currentSheep = sheeps.begin(); currentSheep != sheeps.end(); currentSheep++){
+
+          SDL_Rect sheep1=sheep->getRect(), sheep2=currentSheep->getRect();
+
+          if(currentSheep!=sheep&&SDL_HasIntersection(&sheep1,&sheep2)){
+            sheep->collided=true;
+            collidedWeight+=sheep->getWeight()*sheep->getDirection();
+            if(!currentSheep->collided){
+              collidedWeight+=currentSheep->getWeight()*currentSheep->getDirection();
+              currentSheep->collided=true;
+            }
+            break;
+          }
+        }
+      }
+      
+      if(sheep->collided){
+        if(collidedWeight>0){
+          sheep->getDirection()==1?sheep->update(false):sheep->update(true);
+        }
+        else if(collidedWeight<0){
+          sheep->getDirection()==-1?sheep->update(false):sheep->update(true);
+        }
+      }
+      else{
+        sheep->update(false);
+      }      
+    }
   }
 }
 
@@ -50,12 +79,6 @@ void SheepPath::render(){
     sheep.render();
 }
 
-void SheepPath::selectPath(){
-  rect.setColor(Color::LIGHT_BROWN());
-}
-void SheepPath::unselectPath(){
-  rect.setColor(Color::BROWN());
-}
 
 void SheepPath::setHighlight(unsigned int index, bool show){
   if(show)
