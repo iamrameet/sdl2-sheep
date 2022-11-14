@@ -10,13 +10,14 @@ class Environment{
     SDL_Renderer *renderer;
     int windowWidth, windowHeight;
     int tileSize;
-    int pathCount = 5;
-    int gridCellSize = windowWidth / (pathCount * 2 + 1);
+    int pathCount = 4;
+    int marginLR = 100;
+    int gridCellSize = (windowWidth - marginLR * 2) / (pathCount * 2 + 1);
 
     public:
         Environment(SDL_Renderer *renderer, int windowHeight, int windowWidth,int tileSize = 5);
-        Layer * paintBg();
-        Layer * plotGrid();
-        void paintPaths(VectorList<SheepPath> *paths, SDL_Point *cursor);
+        Layer * createBackground();
+        Layer * createUIComponents();
+        void createPaths(VectorList<SheepPath> *paths, SDL_Point *cursor);
 
 };

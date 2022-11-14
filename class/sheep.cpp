@@ -28,12 +28,14 @@ SDL_Rect Sheep::getRect(){
 void Sheep::move(int movementFactor){
   this->y += dir * movementFactor;
   rect.setY(this->y);
+  collider.rect.y = this->y;
 }
 void Sheep::update(bool invertDirection){
   invertDirection?move(-1):move(1);
 }
 void Sheep::render(){
   rect.render();
+  collider.render(rect.renderer);
 }
 void Sheep::setColor(SDL_Color color){
   this->rect.setColor(color);

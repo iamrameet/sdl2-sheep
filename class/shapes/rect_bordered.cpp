@@ -1,4 +1,5 @@
 #include "shapes/rect_bordered.hpp"
+#include "util.hpp"
 
 int RectBordered::getX(){return rect.x;}
 int RectBordered::getY(){return rect.y;}

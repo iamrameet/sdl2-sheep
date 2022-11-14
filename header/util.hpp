@@ -1,27 +1,14 @@
 #pragma once
+#include <iostream>
 
-#define let auto
-#define function auto
+#define readonly(type, identifier) private: type _ ## identifier;\
+  public: const type &identifier = _ ## identifier;\
+  private:
 
-function calc(){
-  let a = 10, b = 20;
-  return a + b;
-}
+#define _DEBUG 1
 
-template<typename Type> class Array{
-  Type array[];
-public:
-  struct length{
-    private: int value;
-    public: length& operator =(int value){
-      this->value = value;
-      return *this;
-    }
-  } length;
-  Array(unsigned int size): array(Type[size]){}
-  void push(Type element){
-    array[length] = element;
-  }
-};
-
-Array<int> array(10);
+#if _DEBUG == 1
+  #define log(text) std::cout << text << std::endl
+#else
+  #define log(text)
+#endif
