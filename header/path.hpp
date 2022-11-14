@@ -8,7 +8,6 @@
 #include "shapes/rect_bordered.hpp"
 
 class Player;
-
 class SheepPath{
 private:
   Player *player;
@@ -23,7 +22,7 @@ public:
   int getWidth();
   int getHeight();
   void addSheep(int direction = 1);
-  void update();
+  void update(Player** player);
   void render();
   void selectPath();
   void unselectPath();

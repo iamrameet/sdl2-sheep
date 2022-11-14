@@ -52,7 +52,8 @@ void Game::update(){
   counter++;
   int p = 0;
   for(; p < paths.length(); p++){
-    paths[p]->update();
+    paths[p]->update(player);
+
     if(player[1]->controller.getSelectedIndex() != p && paths[p]->collider->withPoint(&cursor)){
       player[1]->controller.selectPath(p);
       break;

@@ -1,4 +1,5 @@
 #include "path.hpp"
+#include "player.hpp"
 
 SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor):
   x(x), y(y),
@@ -27,7 +28,7 @@ void SheepPath::addSheep(int direction){
   sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction));
 }
 
-void SheepPath::update(){
+void SheepPath::update(Player** player){
   for(std::vector<Sheep>::iterator sheep = sheeps.begin(); sheep != sheeps.end(); sheep++){
 
     int pos_y = sheep->getY();
@@ -35,6 +36,12 @@ void SheepPath::update(){
     if(pos_y < 0 || pos_y > rect.getHeight()){
       if(sheep->collided)
         collidedWeight-=sheep->getWeight()*sheep->getDirection();
+      if(pos_y < 0&&sheep->getDirection()==-1){
+        player[0]->decrementHitPoints(sheep->getWeight());
+      }
+      else if(pos_y > rect.getHeight()&&sheep->getDirection()==1){
+        player[1]->decrementHitPoints(sheep->getWeight());
+      }
       sheeps.erase(sheep--);
     }
     else{
