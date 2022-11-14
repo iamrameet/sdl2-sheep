@@ -16,6 +16,8 @@ Game::Game(){}
 Game::Game(int h, int w): windowHeight(h), windowWidth(w){}
 Game::~Game(){}
 
+SheepControl *control[3];
+
 bool Game::init(const char *title, int x, int y){
   if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
     return false;
@@ -33,6 +35,12 @@ bool Game::init(const char *title, int x, int y){
   environment = new Environment(renderer, windowHeight, windowWidth);
   layer.background = environment->createBackground();
   layer.UIComponents = environment->createUIComponents();
+
+  for(int i = 0; i < 3; i++){
+    control[i] = new SheepControl(renderer, 30, windowHeight * (i + 6) / 10, Color::BLACK());
+    layer.UIComponents->addControl(control[i]);
+  }
+
   environment->createPaths(&paths, &cursor);
 
   player[0] = new Player(Controller(renderer, paths));
@@ -41,13 +49,15 @@ bool Game::init(const char *title, int x, int y){
   std::cout << "[Game]: Renderer created!" << std::endl;
   isRunning = true;
 
-  Timer::setInterval(sheepWait, 2000);
+  Timer::setInterval(sheepWait, 100);
 
   return true;
 }
 
 void Game::sheepWait(){
-  std::cout << "counter" << std::endl;
+  control[0]->fill(control[0]->level + 0.01f);
+  control[1]->fill(control[1]->level + 0.02f);
+  control[2]->fill(control[2]->level + 0.03f);
 }
 
 void Game::update(){
@@ -100,12 +110,18 @@ void Game::eventHandler(){
           player[0]->controller.selectPathRight();
           break;
         case SDLK_SPACE:
-          player[0]->controller.plotSheep(1);
+          if(control[0]->level == 1){
+            player[0]->controller.plotSheep(1);
+            control[0]->fill(0);
+          }
           break;
       }
       break;
     case SDL_MOUSEBUTTONUP:
-      player[1]->controller.plotSheep(-1);
+      if(control[1]->level == 1){
+        player[1]->controller.plotSheep(-1);
+        control[1]->fill(0);
+      }
       break;
   }
   SDL_PumpEvents();

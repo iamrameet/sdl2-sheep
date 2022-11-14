@@ -13,18 +13,18 @@ SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height
   collider = new RectCollider(x, y, width, height);
   highlight[0].setHeight(40);
   highlight[1].setHeight(40);
-  highlight[1].setY(rect.getHeight() - 40);
+  highlight[1].setY(rect.rect.h - 40);
 }
 int SheepPath::getWidth(){
-  return rect.getWidth();
+  return rect.rect.w;
 }
 int SheepPath::getHeight(){
-  return rect.getHeight();
+  return rect.rect.h;
 }
 
 void SheepPath::addSheep(int direction){
   int posX = x + 10;
-  int posY = direction == -1 ? rect.getHeight() - Sheep::SIZE : y;
+  int posY = direction == -1 ? rect.rect.h - Sheep::SIZE : y;
   sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction));
 }
 
@@ -33,13 +33,13 @@ void SheepPath::update(Player** player){
 
     int pos_y = sheep->getY();
     
-    if(pos_y < 0 || pos_y > rect.getHeight()){
+    if(pos_y < 0 || pos_y > rect.rect.h){
       if(sheep->collided)
         collidedWeight-=sheep->getWeight()*sheep->getDirection();
       if(pos_y < 0&&sheep->getDirection()==-1){
         player[0]->decrementHitPoints(sheep->getWeight());
       }
-      else if(pos_y > rect.getHeight()&&sheep->getDirection()==1){
+      else if(pos_y > rect.rect.h&&sheep->getDirection()==1){
         player[1]->decrementHitPoints(sheep->getWeight());
       }
       sheeps.erase(sheep--);

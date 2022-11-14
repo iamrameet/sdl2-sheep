@@ -1,11 +1,10 @@
 #include "shapes/rect_bordered.hpp"
 #include "util.hpp"
 
-int RectBordered::getX(){return rect.x;}
-int RectBordered::getY(){return rect.y;}
-int RectBordered::getWidth(){return rect.w;}
-int RectBordered::getHeight(){return rect.h;}
-SDL_Color RectBordered::getColorCode(){return color;}
+RectBordered::RectBordered(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color color):
+  Shape(renderer), color(color){
+    setRect(x, y, width, height);
+}
 
 void RectBordered::setX(int x){
   rect.x = x;
@@ -29,14 +28,18 @@ void RectBordered::setRect(int x, int y, int width, int height){
   rect.h = height;
 }
 
-RectBordered::RectBordered(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color color):
-  Shape(renderer), color(color){
-    setRect(x, y, width, height);
-}
-
 void RectBordered::update(){}
 
 void RectBordered::render(){
   SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
   SDL_RenderDrawRect(renderer, &rect);
 }
+
+// RectBordered & RectBordered::operator=(const RectBordered& rect){
+//   this->_rect.x = rect.x;
+//   this->_rect.y = rect.y;
+//   this->_rect.w = rect.width;
+//   this->_rect.h = rect.height;
+//   _color = rect.color;
+//   return *this;
+// }

@@ -5,7 +5,7 @@
 #include "color.hpp"
 #include "collider.hpp"
 #include "sheep.hpp"
-#include "shapes/rect_bordered.hpp"
+#include "shapes/rect_filled.hpp"
 
 class Player;
 class SheepPath{
