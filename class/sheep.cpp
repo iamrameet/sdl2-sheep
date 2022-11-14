@@ -1,7 +1,10 @@
 #include "sheep.hpp"
+// #include "player.hpp"
 
 Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction):
-  x(x), y(y), dir(direction), rect(renderer, x, y,width, height, direction == 1 ? Color::GREEN() : Color::RED()){
+  x(x), y(y), dir(direction),
+  rect(renderer, x, y, width, height, direction == 1 ? Color::GREEN() : Color::RED()),
+  collider(rect.getRect()){
   // std::cout << "[Sheep]: created" << std::endl;
 }
 Sheep::~Sheep(){
