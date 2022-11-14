@@ -12,8 +12,11 @@ public:
   int length(){
     return items.size();
   }
-  void addItem(Type item){
-    items.push_back(item);
+  void addItem(Type item, int index = -1){
+    if(index < 0)
+      items.insert(items.end() - index - 1, item);
+    else
+      items.insert(items.begin() + index, item);
   }
   void removeItem(int index){
     items.erase(items.begin() + index);

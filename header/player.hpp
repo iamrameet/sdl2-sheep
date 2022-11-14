@@ -1,9 +1,10 @@
 #pragma once
 #include "controller.hpp"
+#include "util.hpp"
 
 class Player{
 
-int hitPoints=1000;
+readonly(int, hitPoints);
 public:
   Controller controller;
   Player(Controller controller);

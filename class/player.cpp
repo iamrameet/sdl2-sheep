@@ -1,11 +1,11 @@
 #include "player.hpp"
 
-Player::Player(Controller controller): controller(controller){}
+Player::Player(Controller controller): controller(controller), _hitPoints(1000){}
 
 int Player::getHitPoints(){
-    return hitPoints;
+    return _hitPoints;
 }
 void Player::decrementHitPoints(int sheepWeight){
-    hitPoints -=sheepWeight;
-    std::cout<<"["<<hitPoints<<"]"<<"decreasing HP by "<<sheepWeight<<std::endl;
+    _hitPoints -=sheepWeight;
+    std::cout<<"["<<_hitPoints<<"]"<<"decreasing HP by "<<sheepWeight<<std::endl;
 }

@@ -10,6 +10,7 @@
 class Player;
 class SheepPath{
 private:
+  Player *player;
   RectFilled rect, highlight[2];
   SDL_Point *cursor;
 public:

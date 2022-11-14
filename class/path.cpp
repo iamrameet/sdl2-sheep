@@ -47,11 +47,9 @@ void SheepPath::update(Player** player){
     else{
       
       if(!sheep->collided){
-        for(std::vector<Sheep>::iterator currentSheep = sheeps.begin(); currentSheep != sheeps.end(); currentSheep++){
+        for(std::vector<Sheep>::iterator currentSheep = sheeps.begin(); currentSheep != sheep; currentSheep++){
 
-          SDL_Rect sheep1=sheep->getRect(), sheep2=currentSheep->getRect();
-
-          if(currentSheep!=sheep&&SDL_HasIntersection(&sheep1,&sheep2)){
+          if(currentSheep->collider.withRectCollider(&sheep->collider)){
             sheep->collided=true;
             collidedWeight+=sheep->getWeight()*sheep->getDirection();
             if(!currentSheep->collided){

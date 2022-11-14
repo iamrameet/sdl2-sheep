@@ -26,7 +26,12 @@ class Game{
     SDL_Renderer *renderer;
     Environment *environment;
     RectBordered *rect;
-    Layer *defaultLayer, *bgLayer, *gridLayer;
+    struct layer{
+        Layer *background,
+            *UIComponents;
+        void render();
+        void clean();
+    } layer;
     Controller *controller;
     SDL_Point cursor;
 
@@ -44,4 +49,5 @@ class Game{
         bool running();
         int getWindowHeight();
         int getWindowWidth();
+        static void sheepWait();
 };

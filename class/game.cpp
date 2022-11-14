@@ -1,5 +1,16 @@
 #include <iostream>
 #include "game.hpp"
+#include "timer.hpp"
+#include "util.hpp"
+
+void Game::layer::render(){
+  background->render();
+  UIComponents->render();
+}
+void Game::layer::clean(){
+  delete background;
+  delete UIComponents;
+}
 
 Game::Game(){}
 Game::Game(int h, int w): windowHeight(h), windowWidth(w){}
@@ -19,35 +30,29 @@ bool Game::init(const char *title, int x, int y){
   if(renderer == nullptr)
     return false;
 
-  // defaultLayer = new Layer();
   environment = new Environment(renderer, windowHeight, windowWidth);
-  bgLayer = environment->paintBg();
-  gridLayer = environment->plotGrid();
-  environment->paintPaths(&paths, &cursor);
+  layer.background = environment->createBackground();
+  layer.UIComponents = environment->createUIComponents();
+  environment->createPaths(&paths, &cursor);
+
   player[0] = new Player(Controller(renderer, paths));
   player[1] = new Player(Controller(renderer, paths));
 
-  // paths[0] = new SheepPath(renderer, 100, 0);
-  // paths[1] = new SheepPath(renderer, 200, 0);
-  // paths[2] = new SheepPath(renderer, 300, 0);
-  // paths[3] = new SheepPath(renderer, 400, 0);
-
-  // defaultLayer->addShape(new RectBordered(renderer, 100, 0, 100, windowHeight, Color::WHITE()));
-  // defaultLayer->addShape(new RectBordered(renderer, 300, 0, 100, windowHeight, Color::WHITE()));
   std::cout << "[Game]: Renderer created!" << std::endl;
   isRunning = true;
+
+  Timer::setInterval(sheepWait, 2000);
+
   return true;
 }
 
+void Game::sheepWait(){
+  std::cout << "counter" << std::endl;
+}
+
 void Game::update(){
-  // if(counter % 500 == 0)
-  //    paths[3]->addSheep();
-  // else if(counter % 400 == 0)
-  //    paths[2]->addSheep(-1);
-  // else if(counter % 300 == 0)
-  //    paths[1]->addSheep(-1);
-  // else if(counter % 200 == 0)
-  //    paths[0]->addSheep();
+
+  Timer::call();
 
   counter++;
   int p = 0;
@@ -66,7 +71,7 @@ void Game::update(){
 void Game::render(){
   SDL_RenderClear(renderer);
   // defaultLayer->render();
-  bgLayer->render();
+  layer.render();
   for(SheepPath path: paths){
     path.render();
   }
@@ -109,7 +114,7 @@ void Game::eventHandler(){
 
 void Game::clean(){
   // delete defaultLayer;
-  delete gridLayer;
+  layer.clean();
   delete environment;
   // for(SheepPath path: paths)
   //   delete &path;

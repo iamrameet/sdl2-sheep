@@ -9,6 +9,7 @@ class Layer{
 private:
   std::vector<Shape *> shapes;
 public:
+  // ~Layer();
   void addShape(Shape *shape);
   void removeShape(uint32_t index);
   void update();
