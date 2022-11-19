@@ -10,9 +10,10 @@
 #include "path.hpp"
 #include "shapes/rect_filled.hpp"
 #include "shapes/rect_bordered.hpp"
-#include "controller.hpp"
 #include "player.hpp"
 #include "vector-list.hpp"
+
+// class Controller;
 
 class Game{
 
@@ -23,19 +24,19 @@ class Game{
     Player *player[2];
 
     SDL_Window *window;
-    SDL_Renderer *renderer;
     Environment *environment;
     RectBordered *rect;
-    struct layer{
-        Layer *background,
-            *UIComponents;
-        void render();
-        void clean();
-    } layer;
     Controller *controller;
     SDL_Point cursor;
 
     public:
+        struct layer{
+            Layer *background,
+                *UIComponents;
+            void render();
+            void clean();
+        } layer;
+        SDL_Renderer *renderer;
         long counter = 0;
         int frameTime = 0;
         Game();
@@ -49,5 +50,4 @@ class Game{
         bool running();
         int getWindowHeight();
         int getWindowWidth();
-        static void sheepWait();
 };

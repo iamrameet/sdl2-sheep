@@ -1,14 +1,15 @@
 #pragma once
 #include <unordered_map>
+#include <functional>
 #include "SDL2/SDL.h"
 
 
 typedef struct Timeout{
-  void (* handler)();
+  std::function<void ()> handler;
   unsigned int timeout;
   unsigned int time;
   bool isInterval = false;
-  Timeout(void (* handler)(), unsigned int timeout, bool isInterval = false){
+  Timeout(std::function<void ()> handler, unsigned int timeout, bool isInterval = false){
     this->handler = handler;
     this->timeout = timeout;
     this->time = timeout + SDL_GetTicks();
@@ -20,11 +21,11 @@ class Timer{
 public:
   static unsigned int keyCounter;
   static std::unordered_map<unsigned int, Timeout> timeouts;
-  static unsigned int setTimeout(void (* handler)(), unsigned int timeout){
+  static unsigned int setTimeout(std::function<void ()> handler, unsigned int timeout){
     timeouts.insert({keyCounter, Timeout(handler, timeout)});
     return keyCounter++;
   }
-  static unsigned int setInterval(void (* handler)(), unsigned int interval){
+  static unsigned int setInterval(std::function<void ()> handler, unsigned int interval){
     timeouts.insert({keyCounter, Timeout(handler, interval, true)});
     return keyCounter++;
   }

@@ -41,8 +41,5 @@ void Environment::createPaths(VectorList<SheepPath> *paths, SDL_Point *cursor){
 
 Layer * Environment::createUIComponents(){
   Layer *layer = new Layer();
-  layer->addShape(new RectBordered(renderer, 30, windowHeight * 0.8f, 40, 40, Color::BLACK()));
-  layer->addShape(new RectBordered(renderer, 30, windowHeight * 0.7f, 40, 40, Color::BLACK()));
-  layer->addShape(new RectBordered(renderer, 30, windowHeight * 0.6f, 40, 40, Color::BLACK()));
   return layer;
 }

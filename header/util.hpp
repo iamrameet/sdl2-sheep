@@ -2,8 +2,7 @@
 #include <iostream>
 
 #define readonly(type, identifier) private: type _ ## identifier;\
-  public: const type &identifier = _ ## identifier;\
-  private:
+  public: const type &identifier = _ ## identifier;
 
 #define _DEBUG 1
 

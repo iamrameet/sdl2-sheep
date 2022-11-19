@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "timer.hpp"
 #include "util.hpp"
+// #include "controller.hpp"
 
 void Game::layer::render(){
   background->render();
@@ -33,21 +34,23 @@ bool Game::init(const char *title, int x, int y){
   environment = new Environment(renderer, windowHeight, windowWidth);
   layer.background = environment->createBackground();
   layer.UIComponents = environment->createUIComponents();
+
   environment->createPaths(&paths, &cursor);
 
-  player[0] = new Player(Controller(renderer, paths));
-  player[1] = new Player(Controller(renderer, paths));
+  player[0] = new Player(Controller(this, paths, 0));
+  player[1] = new Player(Controller(this, paths, 1));
 
   std::cout << "[Game]: Renderer created!" << std::endl;
   isRunning = true;
 
-  Timer::setInterval(sheepWait, 2000);
+  Timer::setInterval([this](){
+    for(int i = 0; i < 3; i++){
+      player[0]->controller.control[i]->fill(player[0]->controller.control[i]->level + (i + 1) * 0.01f);
+      player[1]->controller.control[i]->fill(player[1]->controller.control[i]->level + (i + 1) * 0.01f);
+    }
+  }, 100);
 
   return true;
-}
-
-void Game::sheepWait(){
-  std::cout << "counter" << std::endl;
 }
 
 void Game::update(){
