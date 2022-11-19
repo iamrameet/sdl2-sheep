@@ -21,7 +21,7 @@ public:
   SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor);
   int getWidth();
   int getHeight();
-  void addSheep(int direction = 1);
+  void addSheep(int direction, int type);
   void update(Player** player);
   void render();
   void selectPath();

@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "timer.hpp"
 #include "util.hpp"
+// #include "controller.hpp"
 
 void Game::layer::render(){
   background->render();
@@ -15,8 +16,6 @@ void Game::layer::clean(){
 Game::Game(){}
 Game::Game(int h, int w): windowHeight(h), windowWidth(w){}
 Game::~Game(){}
-
-SheepControl *control[3];
 
 bool Game::init(const char *title, int x, int y){
   if(SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -36,28 +35,22 @@ bool Game::init(const char *title, int x, int y){
   layer.background = environment->createBackground();
   layer.UIComponents = environment->createUIComponents();
 
-  for(int i = 0; i < 3; i++){
-    control[i] = new SheepControl(renderer, 30, windowHeight * (i + 6) / 10, Color::BLACK());
-    layer.UIComponents->addControl(control[i]);
-  }
-
   environment->createPaths(&paths, &cursor);
 
-  player[0] = new Player(Controller(renderer, paths));
-  player[1] = new Player(Controller(renderer, paths));
+  player[0] = new Player(Controller(this, paths, 0));
+  player[1] = new Player(Controller(this, paths, 1));
 
   std::cout << "[Game]: Renderer created!" << std::endl;
   isRunning = true;
 
-  Timer::setInterval(sheepWait, 100);
+  Timer::setInterval([this](){
+    for(int i = 0; i < 3; i++){
+      player[0]->controller.control[i]->fill(player[0]->controller.control[i]->level + (i + 1) * 0.01f);
+      player[1]->controller.control[i]->fill(player[1]->controller.control[i]->level + (i + 1) * 0.01f);
+    }
+  }, 100);
 
   return true;
-}
-
-void Game::sheepWait(){
-  control[0]->fill(control[0]->level + 0.01f);
-  control[1]->fill(control[1]->level + 0.02f);
-  control[2]->fill(control[2]->level + 0.03f);
 }
 
 void Game::update(){
@@ -110,18 +103,12 @@ void Game::eventHandler(){
           player[0]->controller.selectPathRight();
           break;
         case SDLK_SPACE:
-          if(control[0]->level == 1){
-            player[0]->controller.plotSheep(1);
-            control[0]->fill(0);
-          }
+          player[0]->controller.plotSheep(1);
           break;
       }
       break;
     case SDL_MOUSEBUTTONUP:
-      if(control[1]->level == 1){
-        player[1]->controller.plotSheep(-1);
-        control[1]->fill(0);
-      }
+      player[1]->controller.plotSheep(-1);
       break;
   }
   SDL_PumpEvents();

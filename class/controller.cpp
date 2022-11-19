@@ -1,9 +1,20 @@
 #include<iostream>
 #include<SDL2/SDL.h>
+#include "game.hpp"
 #include "controller.hpp"
 
-Controller::Controller(SDL_Renderer *renderer, VectorList<SheepPath> &paths):
-  renderer(renderer), paths(paths){}
+Controller::Controller(Game *game, VectorList<SheepPath> &paths, int playerId):
+  game(game), paths(paths), playerId(playerId){
+    for(int i = 0; i < 3; i++){
+      control[i] = new SheepControl(
+        game->renderer,
+        playerId == 0 ? 30 : game->getWindowWidth() - 40 - 30,
+        game->getWindowHeight() * (i + 6) / 10,
+        Color::WHITE()
+      );
+      game->layer.UIComponents->addControl(control[i]);
+    }
+  }
 
 int Controller::getSelectedIndex(){
   return selected;
@@ -42,8 +53,16 @@ void Controller::clearSelection(){
   selected = -1;
 }
 void Controller::plotSheep(int direction = 1){
-  if(selected >= 0 && selected < paths.length())
-    paths[selected]->addSheep(direction);
+  for(int i = 0; i < 3 ; i++){
+    if(control[i]->level == 1){
+      if(selected >= 0 && selected < paths.length())
+        paths[selected]->addSheep(direction, 3 - i);
+      control[0]->fill(0);
+      control[1]->fill(0);
+      control[2]->fill(0);
+      break;
+    }
+  }
   // sheeps.push_back(Sheep(renderer, paths[selectedPath]->x, paths[selectedPath]->y,paths[selectedPath]->getWidth(),paths[selectedPath]->getWidth()));
 }
 

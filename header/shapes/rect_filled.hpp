@@ -10,11 +10,6 @@ public:
   SDL_Rect rect;
   SDL_Color color;
 public:
-  // const int &x = rect.x;
-  // const int &y = rect.y;
-  // const int &width = rect.w;
-  // const int &height = rect.h;
-
   RectFilled(SDL_Renderer* renderer, int x, int y, int width, int height, SDL_Color color);
 
   void setX(int x);
@@ -25,5 +20,4 @@ public:
   void setRect(int x, int y, int width, int height);
   void update() override;
   void render() override;
-  // RectFilled & operator=(const RectFilled& rect);
 };

@@ -1,8 +1,8 @@
 #include "sheep.hpp"
 // #include "player.hpp"
 
-Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction):
-  x(x), y(y), dir(direction),
+Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction, int type):
+  x(x), y(y), dir(direction), weight(type * 100),
   rect(renderer, x, y, width, height, direction == 1 ? Color::GREEN() : Color::RED()),
   collider(rect.rect){
   // std::cout << "[Sheep]: created" << std::endl;

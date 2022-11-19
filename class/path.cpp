@@ -22,10 +22,10 @@ int SheepPath::getHeight(){
   return rect.rect.h;
 }
 
-void SheepPath::addSheep(int direction){
+void SheepPath::addSheep(int direction, int type){
   int posX = x + 10;
   int posY = direction == -1 ? rect.rect.h - Sheep::SIZE : y;
-  sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction));
+  sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction, type));
 }
 
 void SheepPath::update(Player** player){

@@ -4,19 +4,23 @@
 #include "shapes/rect_bordered.hpp"
 #include "path.hpp"
 #include "vector-list.hpp"
+#include "shapes/sheep_control.hpp"
 
 // #define Array(type, identifier) std::vector<type> identifier
+class Game;
 
 class Controller{
     // Array(SheepPath *, paths);
     VectorList<SheepPath> &paths;
-    SDL_Renderer *renderer;
+    Game *game;
     int selected = 0;
+    int playerId;
     private:
         void onSelect(SheepPath *path, int index, unsigned int highlightIndex);
         void onUnselect(SheepPath *path, int index, unsigned int highlightIndex);
     public:
-        Controller(SDL_Renderer *renderer, VectorList<SheepPath> &paths);
+        SheepControl *control[3];
+        Controller(Game *game, VectorList<SheepPath> &paths, int playerId);
         int getSelectedIndex();
         SheepPath * getSelectedPath();
         void selectPath(int index);

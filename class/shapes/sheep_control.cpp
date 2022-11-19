@@ -6,6 +6,7 @@ SheepControl::SheepControl(SDL_Renderer* renderer, int x, int y, SDL_Color color
   _level(0){}
 
 void SheepControl::fill(float level){
+    std::cout << level << std::endl;
   if(level > 1)
     level = 1;
   else if (level < 0)

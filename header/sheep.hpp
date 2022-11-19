@@ -13,7 +13,7 @@ public:
   // const int &y = _y;
   RectCollider collider;
   bool collided=false;
-  Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction = 1);
+  Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction, int type);
   ~Sheep();
   int getX();
   int getY();
