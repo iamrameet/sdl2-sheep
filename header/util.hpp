@@ -7,7 +7,7 @@
 #define _DEBUG 1
 
 #if _DEBUG == 1
-  #define log(text) std::cout << text << std::endl
+  #define log(text) std::cout << __FILE__ << " [" << __LINE__ << "]: " << text << std::endl
 #else
   #define log(text)
 #endif

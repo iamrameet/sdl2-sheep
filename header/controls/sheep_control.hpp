@@ -1,9 +1,10 @@
 #pragma once
-#include "rect_bordered.hpp"
-#include "rect_filled.hpp"
+#include "shapes/rect_bordered.hpp"
+#include "shapes/rect_filled.hpp"
 #include "util.hpp"
+#include "control.hpp"
 
-class SheepControl{
+class SheepControl: public Control{
   readonly(RectBordered, outline);
   readonly(RectFilled, fillArea);
   readonly(float, level);

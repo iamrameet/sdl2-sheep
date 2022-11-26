@@ -17,11 +17,10 @@
 
 class Game{
 
-    int windowHeight=650;
-    int windowWidth=500;
+    int windowHeight = 720;
+    int windowWidth = 640;
     bool isRunning = false;
-    VectorList<SheepPath> paths;
-    Player *player[2];
+    VectorList<SheepPath *> paths;
 
     SDL_Window *window;
     Environment *environment;
@@ -30,6 +29,7 @@ class Game{
     SDL_Point cursor;
 
     public:
+        Player *player[2];
         struct layer{
             Layer *background,
                 *UIComponents;
