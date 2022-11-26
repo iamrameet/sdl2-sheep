@@ -4,11 +4,11 @@
 Sheep::Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction, int type):
   x(x), y(y), dir(direction), weight(type * 100),
   rect(renderer, x, y, width, height, direction == 1 ? Color::GREEN() : Color::RED()),
-  collider(rect.rect){
+  collider(rect.rect), texture(renderer, direction != 1 ? "../assets/sheep-head.png" : "../assets/sheep-head-black.png", &rect.rect){
   // std::cout << "[Sheep]: created" << std::endl;
 }
 Sheep::~Sheep(){
-  // std::cout << "[Sheep]: destroyed" << std::endl;
+  std::cout << "[Sheep]: destroyed" << std::endl;
 }
 int Sheep::getX(){
   return x;
@@ -34,8 +34,10 @@ void Sheep::update(bool invertDirection){
   invertDirection?move(-1):move(1);
 }
 void Sheep::render(){
-  rect.render();
-  collider.render(rect.renderer);
+  texture.render();
+    // SDL_RenderCopy(rect.renderer, texture.getTexture(), nullptr, &rect.rect);
+  // rect.render();
+  // collider.render(rect.renderer);
 }
 void Sheep::setColor(SDL_Color color){
   this->rect.setColor(color);

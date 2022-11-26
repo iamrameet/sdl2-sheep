@@ -3,10 +3,11 @@
 
 SheepPath::SheepPath(SDL_Renderer *renderer, int x, int y, int width, int height, SDL_Point *cursor):
   x(x), y(y),
-  rect(renderer, x, y, width,height, Color::BROWN()),
+  rect(renderer, x, y, width, height, Color::BROWN()),
+  texture(renderer, "../assets/sheep-path.png", &rect.rect),
   highlight{
-    RectFilled(rect),
-    RectFilled(rect)
+    RectFilled(renderer, x, y, width, height, Color::BROWN()),
+    RectFilled(renderer, x, y, width, height, Color::BROWN())
   },
   cursor(cursor)
 {
@@ -23,65 +24,71 @@ int SheepPath::getHeight(){
 }
 
 void SheepPath::addSheep(int direction, int type){
-  int posX = x + 10;
-  int posY = direction == -1 ? rect.rect.h - Sheep::SIZE : y;
-  sheeps.push_back(Sheep(rect.renderer, posX, posY, Sheep::SIZE, Sheep::SIZE, direction, type));
+  int margin = rect.rect.w * 0.2f;
+  int minWidth = rect.rect.w * 0.3f;
+  int maxWidth = rect.rect.w - margin * 2;
+  int size = (maxWidth - minWidth) * type / 3 + minWidth;
+  int posX = x + (maxWidth - size) / 2 + margin;
+  int posY = direction == -1 ? rect.rect.h - size : y;
+  sheeps.push_back(new Sheep(rect.renderer, posX, posY, size, size, direction, type));
 }
 
 void SheepPath::update(Player** player){
-  for(std::vector<Sheep>::iterator sheep = sheeps.begin(); sheep != sheeps.end(); sheep++){
+  for(std::vector<Sheep *>::iterator sheep = sheeps.begin(); sheep != sheeps.end(); sheep++){
 
-    int pos_y = sheep->getY();
+    int pos_y = (*sheep)->getY();
     
     if(pos_y < 0 || pos_y > rect.rect.h){
-      if(sheep->collided)
-        collidedWeight-=sheep->getWeight()*sheep->getDirection();
-      if(pos_y < 0&&sheep->getDirection()==-1){
-        player[0]->decrementHitPoints(sheep->getWeight());
+      if((*sheep)->collided)
+        collidedWeight-=(*sheep)->getWeight()*(*sheep)->getDirection();
+      if(pos_y < 0&&(*sheep)->getDirection()==-1){
+        player[0]->decrementHitPoints((*sheep)->getWeight());
       }
-      else if(pos_y > rect.rect.h&&sheep->getDirection()==1){
-        player[1]->decrementHitPoints(sheep->getWeight());
+      else if(pos_y > rect.rect.h&&(*sheep)->getDirection()==1){
+        player[1]->decrementHitPoints((*sheep)->getWeight());
       }
+      delete *sheep;
       sheeps.erase(sheep--);
     }
     else{
       
-      if(!sheep->collided){
-        for(std::vector<Sheep>::iterator currentSheep = sheeps.begin(); currentSheep != sheep; currentSheep++){
+      if(!(*sheep)->collided){
+        for(std::vector<Sheep *>::iterator currentSheep = sheeps.begin(); currentSheep != sheep; currentSheep++){
 
-          if(currentSheep->collider.withRectCollider(&sheep->collider)){
-            sheep->collided=true;
-            collidedWeight+=sheep->getWeight()*sheep->getDirection();
-            if(!currentSheep->collided){
-              collidedWeight+=currentSheep->getWeight()*currentSheep->getDirection();
-              currentSheep->collided=true;
+          if((*currentSheep)->collider.withRectCollider(&(*sheep)->collider)){
+            (*sheep)->collided=true;
+            collidedWeight+=(*sheep)->getWeight()*(*sheep)->getDirection();
+            if(!(*currentSheep)->collided){
+              collidedWeight+=(*currentSheep)->getWeight()*(*currentSheep)->getDirection();
+              (*currentSheep)->collided=true;
             }
             break;
           }
         }
       }
       
-      if(sheep->collided){
+      if((*sheep)->collided){
         if(collidedWeight>0){
-          sheep->getDirection()==1?sheep->update(false):sheep->update(true);
+          (*sheep)->update((*sheep)->getDirection() == 1 ? false : true);
         }
         else if(collidedWeight<0){
-          sheep->getDirection()==-1?sheep->update(false):sheep->update(true);
+          (*sheep)->update((*sheep)->getDirection() == -1 ? false : true);
         }
       }
       else{
-        sheep->update(false);
+        (*sheep)->update(false);
       }      
     }
   }
 }
 
 void SheepPath::render(){
-  rect.render();
+  // rect.render();
+  texture.render();
   highlight[0].render();
   highlight[1].render();
-  for(Sheep sheep: sheeps)
-    sheep.render();
+  for(Sheep *sheep: sheeps)
+    sheep->render();
 }
 
 

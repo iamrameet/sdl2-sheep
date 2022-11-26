@@ -4,17 +4,19 @@
 #include <vector>
 #include "color.hpp"
 #include "shape.hpp"
-#include "shapes/sheep_control.hpp"
+#include "control.hpp"
+#include "texture.hpp"
 
 class Layer{
 private:
   std::vector<Shape *> shapes;
-  std::vector<SheepControl *> controls;
+  std::vector<Control *> controls;
 public:
+  Texture *texture = nullptr;
   // ~Layer();
   void addShape(Shape *shape);
   void removeShape(unsigned int index);
-  void addControl(SheepControl *control);
+  void addControl(Control *control);
   void removeControl(unsigned int index);
   void update();
   void render();

@@ -1,8 +1,8 @@
 #include <iostream>
+#include "SDL2/SDL_ttf.h"
 #include "game.hpp"
 #include "timer.hpp"
 #include "util.hpp"
-// #include "controller.hpp"
 
 void Game::layer::render(){
   background->render();
@@ -30,6 +30,17 @@ bool Game::init(const char *title, int x, int y){
   renderer = SDL_CreateRenderer(window, -1, 0);
   if(renderer == nullptr)
     return false;
+
+  int imgFlags = IMG_INIT_PNG;
+  if( !( IMG_Init( imgFlags ) & imgFlags ) ){
+    printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+    return false;
+  }
+
+  if(TTF_Init() == -1){
+    printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+    return false;
+  }
 
   environment = new Environment(renderer, windowHeight, windowWidth);
   layer.background = environment->createBackground();
@@ -60,9 +71,9 @@ void Game::update(){
   counter++;
   int p = 0;
   for(; p < paths.length(); p++){
-    paths[p]->update(player);
+    (*paths[p])->update(player);
 
-    if(player[1]->controller.getSelectedIndex() != p && paths[p]->collider->withPoint(&cursor)){
+    if(player[1]->controller.getSelectedIndex() != p && (*paths[p])->collider->withPoint(&cursor)){
       player[1]->controller.selectPath(p);
       break;
     }
@@ -75,8 +86,8 @@ void Game::render(){
   SDL_RenderClear(renderer);
   // defaultLayer->render();
   layer.render();
-  for(SheepPath path: paths){
-    path.render();
+  for(SheepPath *path: paths){
+    path->render();
   }
   // gridLayer->render();
   SDL_SetRenderDrawColor(renderer, 20, 20, 20, 255);

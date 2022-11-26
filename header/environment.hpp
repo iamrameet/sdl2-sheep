@@ -12,12 +12,13 @@ class Environment{
     int tileSize;
     int pathCount = 4;
     int marginLR = 100;
-    int gridCellSize = (windowWidth - marginLR * 2) / (pathCount * 2 + 1);
+    int pathGap = 20;
+    int pathSizeW = (windowWidth - marginLR * 2) / pathCount - pathGap;
 
     public:
         Environment(SDL_Renderer *renderer, int windowHeight, int windowWidth,int tileSize = 5);
         Layer * createBackground();
         Layer * createUIComponents();
-        void createPaths(VectorList<SheepPath> *paths, SDL_Point *cursor);
+        void createPaths(VectorList<SheepPath *> *paths, SDL_Point *cursor);
 
 };

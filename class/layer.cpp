@@ -14,7 +14,7 @@ void Layer::removeShape(uint32_t index){
   shapes.erase(shapes.begin() + index);
 }
 
-void Layer::addControl(SheepControl *control){
+void Layer::addControl(Control *control){
   controls.push_back(control);
 }
 void Layer::removeControl(unsigned int index){
@@ -25,13 +25,15 @@ void Layer::removeControl(unsigned int index){
 void Layer::update(){
   for(Shape *shape : shapes)
     shape->update();
-  for(SheepControl *control : controls)
+  for(Control *control : controls)
     control->update();
 }
 
 void Layer::render(){
   for(Shape *shape : shapes)
     shape->render();
-  for(SheepControl *control : controls)
+  for(Control *control : controls)
     control->render();
+  if(texture)
+    texture->render();
 }

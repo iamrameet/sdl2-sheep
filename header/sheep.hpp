@@ -3,16 +3,18 @@
 #include "shapes/rect_filled.hpp"
 #include "color.hpp"
 #include "collider.hpp"
+#include "texture.hpp"
 
 class Sheep{
 private:
   int x, y, dir;
   int weight=100;
   RectFilled rect;
+  Texture texture;
 public:
   // const int &y = _y;
   RectCollider collider;
-  bool collided=false;
+  bool collided = false;
   Sheep(SDL_Renderer *renderer, int x, int y, int width, int height, int direction, int type);
   ~Sheep();
   int getX();
